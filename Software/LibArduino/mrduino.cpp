@@ -1,16 +1,25 @@
 /**
   ******************************************************************************
   * @file    mrduino.cpp
-  * @author  Mace Robotics
-  * @version V0.1
-  * @date    27/05/2016
-  * @brief
+  * @author  Mace Robotics (www.macerobotics.com)
+  * @version 0.2
+  * @date    31/06/2016
+  * @brief   lib for MRduino robot
   *
  *******************************************************************************/
 
 
 #include <Arduino.h>
 #include "mrduino.h"
+
+
+static boolean  state_control = false;
+
+void initRobot()
+{
+  Serial.begin(115200);
+  controlDisable();
+}
 
 
 /**********************************************************
@@ -47,14 +56,65 @@ String  commande;
  * @param  None
  * @retval None
 **********************************************************/
-void firmwareVersion()
+float firmwareVersion()
 {
 String  commande;
  
   commande = "#FV!";
-  Serial.println(commande);  
+  Serial.println(commande); 
+  
+  return(readFloatData());
+
 }
 
+
+/**********************************************************
+ * @brief  battery
+ * @param  None
+ * @retval None
+**********************************************************/
+float battery()
+{
+String  commande;
+ 
+  commande = "#BAT!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
+}
+
+
+/**********************************************************
+ * @brief  battery
+ * @param  None
+ * @retval None
+**********************************************************/
+float temperature()
+{
+String  commande;
+ 
+  commande = "#TE!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
+}
+
+
+/**********************************************************
+ * @brief  readSwitch
+ * @param  None
+ * @retval None
+**********************************************************/
+int readSwitch()
+{
+String  commande;
+ 
+  commande = "#SW!";
+  Serial.println(commande); 
+  
+  return(readData());
+
+}
 
 
 
@@ -71,6 +131,55 @@ String  commande;
   Serial.println(commande); 
   
 }
+
+
+/**********************************************************
+ * @brief  forwardC (forward with control)
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+void forwardC(int speed, int distance)
+{
+String  commande;
+int  state = 0;
+ 
+  commande = "#MFC," + String(distance) + "," + String(speed) + "!";
+  Serial.println(commande); 
+  
+  while(state != 3)
+  {
+    Serial.println("#TGS,1!"); 
+    Serial.println(state);
+    state = readData();
+    
+  }
+  
+}
+
+
+/**********************************************************
+ * @brief  backC (back with control)
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+void backC(int speed, int distance)
+{
+String  commande;
+int  state = 0;
+ 
+  commande = "#MBC," + String(distance) + "," + String(speed) + "!";
+  Serial.println(commande); 
+  
+  while(state != 3)
+  {
+    Serial.println("#TGS,1!"); 
+    Serial.println(state);
+    state = readData();
+    
+  }
+  
+}
+
 
 
 /**********************************************************
@@ -104,6 +213,29 @@ String  commande;
 
 
 /**********************************************************
+ * @brief  turnLeftC
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+void turnLeftC(int speed, int distance)
+{
+String  commande;
+int  state = 0;
+ 
+  commande = "#TLC," + String(distance) + "," + String(speed) + "!";
+  Serial.println(commande); 
+  
+  while(state != 3)
+  {
+    Serial.println("#TGS,2!"); 
+    Serial.println(state);
+    state = readData();
+  }
+  
+}
+
+
+/**********************************************************
  * @brief  turnRight
  * @param  speed ( 0 to 100 )
  * @retval None
@@ -114,6 +246,29 @@ String  commande;
  
   commande = "#TR," + String(speed) + "!";
   Serial.println(commande); 
+  
+}
+
+
+/**********************************************************
+ * @brief  turnRightC
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+void turnRightC(int speed, int distance)
+{
+String  commande;
+int  state = 0;
+ 
+  commande = "#TRC," + String(distance) + "," + String(speed) + "!";
+  Serial.println(commande); 
+  
+  while(state != 3)
+  {
+    Serial.println("#TGS,2!"); 
+    Serial.println(state);
+    state = readData();
+  }
   
 }
 
@@ -157,13 +312,41 @@ int data;
 
 
 /**********************************************************
+ * @brief  groundSensor
+ * @param  
+ * @retval None
+**********************************************************/
+int groundSensor(int number)
+{
+String  commande;
+int data;
+ 
+  commande = "#GR," + String(number) + "!";
+  Serial.println(commande); 
+
+  data = readData();
+  
+  return data;
+}
+
+
+/**********************************************************
  * @brief  controlEnable
  * @param  
  * @retval None
 **********************************************************/
 void controlEnable()
 {
-  Serial.println("#CRE!"); 
+  if(state_control == false)
+  {
+    Serial.println("#CRE!"); 
+    state_control = true;
+  }
+  else
+  {
+    // error
+  }
+  
 }
 
 
@@ -175,6 +358,7 @@ void controlEnable()
 void controlDisable()
 {
   Serial.println("#CRD!"); 
+  state_control = false;
 }
 
 
@@ -210,6 +394,29 @@ String readString;
   }    
 
   return readString.toInt();
+}
+
+/**********************************************************
+ * @brief  readFloatData
+ * @param  
+ * @retval None
+**********************************************************/
+float readFloatData()
+{ 
+char c=0;        
+String readString;
+
+  while (c != '\n')
+  {
+    if (Serial.available() >0)
+    {
+      c = Serial.read();  //gets one byte from serial buffer
+      if ( c != '$')
+        readString += c; //makes the string readString
+    } 
+  }    
+
+  return readString.toFloat();
 }
 
 // end file
