@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.2
-  * @date    31/06/2016
+  * @version 0.3
+  * @date    08/06/2016
   * @brief   lib for MRduino robot
   *
  *******************************************************************************/
@@ -110,6 +110,23 @@ int readSwitch()
 String  commande;
  
   commande = "#SW!";
+  Serial.println(commande); 
+  
+  return(readData());
+
+}
+
+
+/**********************************************************
+ * @brief  irReceiver
+ * @param  None
+ * @retval None
+**********************************************************/
+int irReceiver()
+{
+String  commande;
+ 
+  commande = "#RC5!";
   Serial.println(commande); 
   
   return(readData());

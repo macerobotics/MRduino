@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics
-  * @version 0.2
-  * @date    31/06/2016
-  * @brief
+  * @version 0.3
+  * @date    08/06/2016
+  * @brief   lib for MRduino robot
   *
  *******************************************************************************/
 
@@ -32,6 +32,8 @@ void controlEnable();
 void controlDisable();
 
 int readSwitch();
+
+int irReceiver();
 
 float battery();
 float temperature();
