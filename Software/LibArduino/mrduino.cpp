@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.3
-  * @date    08/06/2016
+  * @version 0.5
+  * @date    04/07/2016
   * @brief   lib for MRduino robot
   *
  *******************************************************************************/
@@ -387,6 +387,91 @@ void controlDisable()
 void stop()
 {
   Serial.println("#STP!"); 
+}
+
+
+/**********************************************************
+ * @brief read encoder left
+ * @param  
+ * @retval None
+**********************************************************/
+int encoderLeft()
+{
+String  commande;
+int data;
+ 
+  commande = "#EDL!";
+  Serial.println(commande); 
+
+  data = readData();
+  
+  return data;
+}
+
+/**********************************************************
+ * @brief read encoder right
+ * @param  
+ * @retval None
+**********************************************************/
+int encoderRight()
+{
+String  commande;
+int data;
+ 
+  commande = "#EDR!";
+  Serial.println(commande); 
+
+  data = readData();
+  
+  return data;
+}
+
+
+/**********************************************************
+ * @brief  acceleroX
+ * @param  None
+ * @retval None
+**********************************************************/
+float acceleroX()
+{
+String  commande;
+ 
+  commande = "#ACCX!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
+}
+
+
+/**********************************************************
+ * @brief  acceleroY
+ * @param  None
+ * @retval None
+**********************************************************/
+float acceleroY()
+{
+String  commande;
+ 
+  commande = "#ACCY!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
+}
+
+
+/**********************************************************
+ * @brief  acceleroZ
+ * @param  None
+ * @retval None
+**********************************************************/
+float acceleroZ()
+{
+String  commande;
+ 
+  commande = "#ACCZ!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
 }
 
 

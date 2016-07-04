@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics
-  * @version 0.3
-  * @date    08/06/2016
+  * @version 0.5
+  * @date    04/07/2016
   * @brief   lib for MRduino robot
   *
  *******************************************************************************/
@@ -38,6 +38,7 @@ int irReceiver();
 float battery();
 float temperature();
 
+// move
 void forwardC(int speed, int distance);
 void backC(int speed, int distance);
 void turnRightC(int speed, int distance);
@@ -45,8 +46,16 @@ void turnLeftC(int speed, int distance);
 
 void stop();
 
+// encoder
+int encoderLeft();
+int encoderRight();
+
 int readData();
 float readFloatData();
 
+// accelerometer
+float acceleroX();
+float acceleroY();
+float acceleroZ();
 
 #endif
