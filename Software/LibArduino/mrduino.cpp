@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.5
-  * @date    04/07/2016
+  * @version 0.7
+  * @date    05/09/2016
   * @brief   lib for MRduino robot
   *
  *******************************************************************************/
@@ -19,6 +19,8 @@ void initRobot()
 {
   Serial.begin(115200);
   controlDisable();
+  
+  delay(0.5);
 }
 
 
@@ -175,6 +177,28 @@ int  state = 0;
 
 
 /**********************************************************
+ * @brief  forward_mm (forward with control)
+ * @param  speed ( 0 to 100 ), distance millimeter
+ * @retval None
+**********************************************************/
+void forward_mm(int speed, int distance)
+{
+  forwardC(speed, distance*4);
+}
+
+
+/**********************************************************
+ * @brief  back_mm (forward with control)
+ * @param  speed ( 0 to 100 ), distance millimeter
+ * @retval None
+**********************************************************/
+void back_mm(int speed, int distance)
+{
+  backC(speed, distance*4);
+}
+
+
+/**********************************************************
  * @brief  backC (back with control)
  * @param  speed ( 0 to 100 )
  * @retval None
@@ -250,6 +274,44 @@ int  state = 0;
   }
   
 }
+
+
+/**********************************************************
+ * @brief  turnRight_degree
+ * @param  speed ( 0 to 100 ), angle (0 to 360)
+ * @retval None
+**********************************************************/
+void turnRight_degree(int speed, int angle)
+{
+float angle_degree = 0;
+int angle_turn;
+  
+  angle_degree = (float)(angle*546.0);
+  angle_degree = (float)(angle_degree/90.0);
+  angle_turn = (int)(angle_degree);
+ 
+  turnRightC(speed, angle_turn);
+}
+
+
+/**********************************************************
+ * @brief  turnLeft_degree
+ * @param  speed ( 0 to 100 ), angle (0 to 360)
+ * @retval None
+**********************************************************/
+void turnLeft_degree(int speed, int angle)
+{
+float angle_degree = 0;
+int angle_turn;
+  
+  angle_degree = (float)(angle*546.0);
+  angle_degree = (float)(angle_degree/90.0);
+  angle_turn = (int)(angle_degree);
+ 
+  turnLeftC(speed, angle_turn);
+}
+
+
 
 
 /**********************************************************

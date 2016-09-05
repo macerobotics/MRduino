@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics
-  * @version 0.5
-  * @date    04/07/2016
+  * @version 0.7
+  * @date    05/09/2016
   * @brief   lib for MRduino robot
   *
  *******************************************************************************/
@@ -40,9 +40,14 @@ float temperature();
 
 // move
 void forwardC(int speed, int distance);
+void forward_mm(int speed, int distance);
 void backC(int speed, int distance);
+void back_mm(int speed, int distance);
 void turnRightC(int speed, int distance);
 void turnLeftC(int speed, int distance);
+
+void turnRight_degree(int speed, int angle);
+void turnLeft_degree(int speed, int angle);
 
 void stop();
 
