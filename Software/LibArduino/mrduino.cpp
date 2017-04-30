@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.7
-  * @date    05/09/2016
-  * @brief   lib for MRduino robot
+  * @version 0.8
+  * @date    30/04/2017
+  * @brief   lib for MRduino robot (Arduino board) and MRduino Wireless (Esus) board
   *
  *******************************************************************************/
 
@@ -12,7 +12,10 @@
 #include <Arduino.h>
 #include "mrduino.h"
 
-
+static void forwardControl(int speed, int distance);
+static void backControl(int speed, int distance);
+static void turnRightControl(int speed, int angle);
+static void turnLeftControl(int speed, int angle);
 static boolean  state_control = false;
 
 void initRobot()
@@ -144,11 +147,7 @@ String  commande;
 **********************************************************/
 void forward(int speed)
 {
-String  commande;
- 
-  commande = "#MF," + String(speed) + "!";
-  Serial.println(commande); 
-  
+  forwardControl(speed, 99999);
 }
 
 
@@ -230,11 +229,7 @@ int  state = 0;
 **********************************************************/
 void back(int speed)
 {
-String  commande;
- 
-  commande = "#MB," + String(speed) + "!";
-  Serial.println(commande); 
-  
+  backControl(speed, 99999);
 }
 
 
@@ -244,12 +239,8 @@ String  commande;
  * @retval None
 **********************************************************/
 void turnLeft(int speed)
-{
-String  commande;
- 
-  commande = "#TL," + String(speed) + "!";
-  Serial.println(commande); 
-  
+{  
+  turnLeftControl(speed,99999); 
 }
 
 
@@ -321,11 +312,11 @@ int angle_turn;
 **********************************************************/
 void turnRight(int speed)
 {
-String  commande;
+//String  commande;
  
-  commande = "#TR," + String(speed) + "!";
-  Serial.println(commande); 
-  
+  //commande = "#TR," + String(speed) + "!";
+  //Serial.println(commande); 
+  turnRightControl(speed,99999);
 }
 
 
@@ -448,6 +439,12 @@ void controlDisable()
 **********************************************************/
 void stop()
 {
+  //Serial.println("#STP!"); 
+  
+  if(state_control == true)
+  {
+    controlDisable();  
+  }
   Serial.println("#STP!"); 
 }
 
@@ -581,6 +578,84 @@ String readString;
   }    
 
   return readString.toFloat();
+}
+
+
+/**********************************************************
+ * @brief  forwardControl
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+static void forwardControl(int speed, int distance)
+{
+String  commande;
+
+  controlEnable();
+  
+  if(state_control == true)
+  {
+    commande = "#MFC," + String(distance) + "," + String(speed) + "!";
+    Serial.println(commande); 
+  }
+
+}
+
+
+/**********************************************************
+ * @brief  backControl
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+static void backControl(int speed, int distance)
+{
+String  commande;
+
+  controlEnable();
+  
+  if(state_control == true)
+  {
+    commande = "#MBC," + String(distance) + "," + String(speed) + "!";
+    Serial.println(commande); 
+  }
+
+}
+
+/**********************************************************
+ * @brief  turnRightControl
+ * @param  
+ * @retval None
+**********************************************************/
+static void turnRightControl(int speed, int angle)
+{
+String  commande;
+
+  controlEnable();
+  
+  if(state_control == true)
+  {
+    commande = "#TRC," + String(angle) + "," + String(speed) + "!";
+    Serial.println(commande); 
+  }
+
+}
+
+/**********************************************************
+ * @brief  turnRightControl
+ * @param  
+ * @retval None
+**********************************************************/
+static void turnLeftControl(int speed, int angle)
+{
+String  commande;
+
+  controlEnable();
+  
+  if(state_control == true)
+  {
+    commande = "#TLC," + String(angle) + "," + String(speed) + "!";
+    Serial.println(commande); 
+  }
+
 }
 
 // end file
