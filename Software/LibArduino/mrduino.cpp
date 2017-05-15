@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.8
-  * @date    30/04/2017
+  * @version 0.9
+  * @date    15/05/2017
   * @brief   lib for MRduino robot (Arduino board) and MRduino Wireless (Esus) board
   *
  *******************************************************************************/
@@ -145,11 +145,16 @@ String  commande;
  * @param  speed ( 0 to 100 )
  * @retval None
 **********************************************************/
+
 void forward(int speed)
 {
-  forwardControl(speed, 99999);
-}
+String  commande;
 
+  commande = "#MF," + String(speed) + "!";
+  Serial.println(commande); 
+  
+  //forwardControl(speed, 9999);
+ }
 
 /**********************************************************
  * @brief  forwardC (forward with control)
@@ -229,9 +234,14 @@ int  state = 0;
 **********************************************************/
 void back(int speed)
 {
-  backControl(speed, 99999);
-}
+String  commande;
 
+  commande = "#MB," + String(speed) + "!";
+  Serial.println(commande); 
+  
+    
+  //backControl(speed, 9999);
+ }
 
 /**********************************************************
  * @brief  turnLeft
@@ -240,9 +250,11 @@ void back(int speed)
 **********************************************************/
 void turnLeft(int speed)
 {  
-  turnLeftControl(speed,99999); 
-}
+String  commande;
 
+  commande = "#TL," + String(speed) + "!";
+  Serial.println(commande); 
+ }
 
 /**********************************************************
  * @brief  turnLeftC
@@ -312,11 +324,11 @@ int angle_turn;
 **********************************************************/
 void turnRight(int speed)
 {
-//String  commande;
+String  commande;
  
-  //commande = "#TR," + String(speed) + "!";
-  //Serial.println(commande); 
-  turnRightControl(speed,99999);
+  commande = "#TR," + String(speed) + "!";
+  Serial.println(commande); 
+  //turnRightControl(speed,99999);
 }
 
 
@@ -531,6 +543,21 @@ String  commande;
   Serial.println(commande); 
   
   return(readFloatData());
+}
+
+
+/**********************************************************
+ * @brief  acceleroZ
+ * @param  None
+ * @retval None
+**********************************************************/
+void speakerEnable()
+{
+String  commande;
+ 
+  commande = "#SPE!";
+  Serial.println(commande); 
+
 }
 
 

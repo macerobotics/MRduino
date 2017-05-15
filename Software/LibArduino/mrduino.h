@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics
-  * @version 0.7
-  * @date    05/09/2016
-  * @brief   lib for MRduino robot
+  * @version 0.9
+  * @date    15/05/2017
+  * @brief   lib for MRduino robot an MRduino Wireless
   *
  *******************************************************************************/
 
@@ -62,5 +62,8 @@ float readFloatData();
 float acceleroX();
 float acceleroY();
 float acceleroZ();
+
+//speaker
+void speakerEnable();
 
 #endif
