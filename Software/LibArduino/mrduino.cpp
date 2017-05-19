@@ -2,14 +2,16 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.9
-  * @date    15/05/2017
+  * @version 0.1
+  * @date    19/05/2017
   * @brief   lib for MRduino robot (Arduino board) and MRduino Wireless (Esus) board
   *
  *******************************************************************************/
 
 
 #include <Arduino.h>
+#include <math.h>
+#include <assert.h>
 #include "mrduino.h"
 
 static void forwardControl(int speed, int distance);
@@ -284,16 +286,23 @@ int  state = 0;
  * @param  speed ( 0 to 100 ), angle (0 to 360)
  * @retval None
 **********************************************************/
-void turnRight_degree(int speed, int angle)
+void turnRight_degree(int speed, unsigned int angle)
 {
 float angle_degree = 0;
 int angle_turn;
-  
-  angle_degree = (float)(angle*546.0);
-  angle_degree = (float)(angle_degree/90.0);
-  angle_turn = (int)(angle_degree);
+
+  if((angle >= 0)&&(angle <= 360))
+  {
+    angle_degree = (float)(angle*546.0);
+    angle_degree = (float)(angle_degree/90.0);
+    angle_turn = (int)(angle_degree);
  
-  turnRightC(speed, angle_turn);
+    turnRightC(speed, angle_turn); 
+  }
+  else
+  {
+    // error angle value
+  }
 }
 
 
@@ -302,16 +311,24 @@ int angle_turn;
  * @param  speed ( 0 to 100 ), angle (0 to 360)
  * @retval None
 **********************************************************/
-void turnLeft_degree(int speed, int angle)
+void turnLeft_degree(int speed, unsigned int angle)
 {
 float angle_degree = 0;
 int angle_turn;
   
-  angle_degree = (float)(angle*546.0);
-  angle_degree = (float)(angle_degree/90.0);
-  angle_turn = (int)(angle_degree);
+  
+  if((angle >= 0)&&(angle <= 360))
+  {
+    angle_degree = (float)(angle*546.0);
+    angle_degree = (float)(angle_degree/90.0);
+    angle_turn = (int)(angle_degree);
  
-  turnLeftC(speed, angle_turn);
+    turnLeftC(speed, angle_turn);
+  }
+  else
+  {
+    // error angle value
+  }
 }
 
 
@@ -322,7 +339,7 @@ int angle_turn;
  * @param  speed ( 0 to 100 )
  * @retval None
 **********************************************************/
-void turnRight(int speed)
+void turnRight(unsigned int speed)
 {
 String  commande;
  
@@ -683,6 +700,195 @@ String  commande;
     Serial.println(commande); 
   }
 
+}
+
+/**********************************************************
+ * @brief  turn_degree
+ *                   90°
+ *                 |
+ * @param  180°<--- ----> 0° (0 to 360°)
+ * @retval None
+**********************************************************/
+void turn_degree(int speed, unsigned int angle)
+{
+float angle_Robot;
+float angle_Consigne;
+
+  // read actual robot position
+  angle_Robot = robotPositionOrientation();
+  
+  // conversion en degree
+  angle_Robot = (angle_Robot*180.0)/(3.14);
+  
+  angle_Consigne = angle - angle_Robot;
+  
+  if(angle >= angle_Robot)
+  {
+	   turnLeft_degree(10,abs(angle_Consigne)); 
+  }
+  else
+  {
+	   turnRight_degree(10,abs(angle_Consigne));  
+  }
+  
+
+}
+
+
+/**********************************************************
+ * @brief  robotPositionX
+ * @param  
+ * @retval None
+**********************************************************/
+float robotPositionX()
+{
+String  commande;
+ 
+  commande = "#POX!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
+
+}
+
+/**********************************************************
+ * @brief  robotPositionY
+ * @param  None
+ * @retval None
+**********************************************************/
+float robotPositionY()
+{
+String  commande;
+ 
+  commande = "#POY!";
+  Serial.println(commande); 
+  
+  return(-readFloatData());
+
+}
+
+
+/**********************************************************
+ * @brief  robotPositionOrientation
+ * @param  None
+ * @retval None
+**********************************************************/
+float robotPositionOrientation()
+{
+String  commande;
+ 
+  commande = "#POO!";
+  Serial.println(commande); 
+  
+  return(readFloatData());
+}
+
+
+/**********************************************************
+ * @brief  robotGo
+ * @param coordonner X and coordonner Y
+ * @retval None
+**********************************************************/
+void robotGo(int coord_X, int coord_Y)
+{
+int distance;
+float temp;
+float angle, angle_Robot;
+float coord_X_Robot, coord_Y_Robot;
+float coord_X_Goal, coord_Y_Goal;
+
+
+  // read actual robot position
+  coord_X_Robot = robotPositionX();
+  coord_Y_Robot = robotPositionY();
+  
+  // read actual robot position
+  angle_Robot = robotPositionOrientation();
+  
+  // conversion en degree
+  angle_Robot = (angle_Robot*180.0)/(3.14);
+  
+  // calcul goal coordonner
+  coord_X_Goal = (float)(coord_X - coord_X_Robot);
+  coord_Y_Goal = (float)(coord_Y - coord_Y_Robot);
+
+  if(coord_Y_Goal > 0)
+  {
+
+    distance = sqrt(coord_X_Goal*coord_X_Goal + coord_Y_Goal*coord_Y_Goal);
+	temp = (float)((float)coord_X_Goal/(float)distance);
+	
+	if(temp > 1.0)
+	{
+	  temp = 1.0;
+	}
+	   
+	if(temp < -1.0)
+	{
+	  temp = -1.0;
+	}
+	   
+    angle = acos(temp);
+  }
+  else
+  {
+    if(coord_X_Goal > 0)
+    {
+
+      distance = sqrt(coord_X_Goal*coord_X_Goal + coord_Y_Goal*coord_Y_Goal);
+	  temp = (float)((float)coord_Y_Goal/(float)distance);
+	  
+	  	if(temp > 1.0)
+	   {
+	     temp = 1.0;
+	   }
+	   
+	   if(temp < -1.0)
+	   {
+	     temp = -1.0;
+	   }
+	   
+	   
+      angle = asin(temp);
+    }
+    else
+    {
+
+      distance = sqrt(coord_X_Goal*coord_X_Goal + coord_Y_Goal*coord_Y_Goal);
+	  temp = (float)((float)coord_X_Goal/(float)distance);
+	  
+	   if(temp > 1.0)
+	   {
+	     temp = 1.0;
+	   }
+	   
+	   if(temp < -1.0)
+	   {
+	     temp = -1.0;
+	   }
+	      
+	  temp = asin(temp);
+
+      angle = -(1.5707 - temp);
+    }
+
+  }
+
+  // conversion en degree
+  angle = (angle*180.0)/(3.14);
+
+  if(angle < 0)
+  {
+	  angle = angle + 360;
+  }
+
+  //angle = abs(angle_Robot) + angle;
+  turn_degree(5,angle); 
+	
+  forwardC(5, distance);
+  
+ 
+  
 }
 
 // end file

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mrduino.cpp
   * @author  Mace Robotics
-  * @version 0.9
-  * @date    15/05/2017
+  * @version 0.1
+  * @date    19/05/2017
   * @brief   lib for MRduino robot an MRduino Wireless
   *
  *******************************************************************************/
@@ -45,11 +45,19 @@ void backC(int speed, int distance);
 void back_mm(int speed, int distance);
 void turnRightC(int speed, int distance);
 void turnLeftC(int speed, int distance);
-
-void turnRight_degree(int speed, int angle);
-void turnLeft_degree(int speed, int angle);
-
 void stop();
+void robotGo(int coord_X, int coord_Y);
+
+// turn degree
+void turnRight_degree(int speed, unsigned int angle);
+void turnLeft_degree(int speed, unsigned int angle);
+void turn_degree(int speed, unsigned int angle);
+
+// position
+float robotPositionX();
+float robotPositionY();
+float robotPositionOrientation();
+
 
 // encoder
 int encoderLeft();
