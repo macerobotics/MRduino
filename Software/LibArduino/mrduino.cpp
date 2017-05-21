@@ -789,13 +789,15 @@ String  commande;
  * @param coordonner X and coordonner Y
  * @retval None
 **********************************************************/
-void robotGo(int coord_X, int coord_Y)
+void robotGo(int speed, int coord_X, int coord_Y)
 {
 int distance;
 float temp;
 float angle, angle_Robot;
 float coord_X_Robot, coord_Y_Robot;
 float coord_X_Goal, coord_Y_Goal;
+
+  controlEnable();
 
 
   // read actual robot position
@@ -882,12 +884,11 @@ float coord_X_Goal, coord_Y_Goal;
 	  angle = angle + 360;
   }
 
-  //angle = abs(angle_Robot) + angle;
-  turn_degree(5,angle); 
+  turn_degree(speed,angle); 
 	
-  forwardC(5, distance);
+  forwardC(speed, distance);
   
- 
+  controlDisable();
   
 }
 

@@ -46,7 +46,7 @@ void back_mm(int speed, int distance);
 void turnRightC(int speed, int distance);
 void turnLeftC(int speed, int distance);
 void stop();
-void robotGo(int coord_X, int coord_Y);
+void robotGo(int speed, int coord_X, int coord_Y);
 
 // turn degree
 void turnRight_degree(int speed, unsigned int angle);
