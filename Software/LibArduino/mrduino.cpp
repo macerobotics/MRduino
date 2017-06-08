@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
   * @file    mrduino.cpp
-  * @author  Mace Robotics (www.macerobotics.com)
-  * @version 0.1
-  * @date    19/05/2017
-  * @brief   lib for MRduino robot (Arduino board) and MRduino Wireless (Esus) board
+  * @author  Mace Robotics
+  * @version 0.21
+  * @date    08/06/2017
+  * @brief   lib for MRduino robot an MRduino Wireless
   *
  *******************************************************************************/
 
@@ -141,13 +141,40 @@ String  commande;
 }
 
 
+/**********************************************************
+ * @brief  motorRight
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+void motorRight(int speed, int direction)
+{
+String  commande;
+
+  commande = "#MOTR," + String(direction) + "," + String(speed) + "!";
+  Serial.println(commande); 
+}
+
+
+/**********************************************************
+ * @brief  motorRight
+ * @param  speed ( 0 to 100 )
+ * @retval None
+**********************************************************/
+void motorLeft(int speed, int direction)
+{
+String  commande;
+
+  commande = "#MOTL," + String(direction) + "," + String(speed) + "!";
+  Serial.println(commande); 
+}
+
+
 
 /**********************************************************
  * @brief  forward
  * @param  speed ( 0 to 100 )
  * @retval None
 **********************************************************/
-
 void forward(int speed)
 {
 String  commande;
@@ -339,7 +366,7 @@ int angle_turn;
  * @param  speed ( 0 to 100 )
  * @retval None
 **********************************************************/
-void turnRight(unsigned int speed)
+void turnRight(int speed)
 {
 String  commande;
  

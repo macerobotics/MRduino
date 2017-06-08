@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    mrduino.cpp
+  * @file    mrduino.h
   * @author  Mace Robotics
-  * @version 0.1
-  * @date    19/05/2017
+  * @version 0.21
+  * @date    08/06/2017
   * @brief   lib for MRduino robot an MRduino Wireless
   *
  *******************************************************************************/
@@ -37,6 +37,10 @@ int irReceiver();
 
 float battery();
 float temperature();
+
+// motor
+void motorRight(int speed, int direction);
+void motorLeft(int speed, int direction);
 
 // move
 void forwardC(int speed, int distance);
